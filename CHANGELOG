@@ -1,0 +1,4 @@
+0.1.0:
+    feat: provide basic config interface
+    Implemented the basic config struct and done corresponding unit test.
+    
