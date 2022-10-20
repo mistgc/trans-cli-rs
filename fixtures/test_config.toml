@@ -1,3 +1,8 @@
 [basic]
+backend = "default"
+from = "en"
+to = "zh"
+
+[key]
 appid = "appid_123"
 secert_key = "key_123"
