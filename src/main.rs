@@ -1,4 +1,4 @@
-use trans_cli_rs::App;
+use trans::App;
 
 fn main() {
     App::run();

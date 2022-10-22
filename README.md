@@ -3,9 +3,10 @@
 ## Install
 ### From Source
 ```sh
-git clone
-cd
+git clone https://github.com/zaiic/trans-cli-rs.git
+cd trans-cli-rs
 cargo build --release
+sudo cp target/release/trans /usr/bin
 ```
 
 ## Usage
@@ -14,9 +15,19 @@ trans 'hello world'
 ```
 
 ## Config
+Create a config file in `~/.config/trans-cli-rs/config.toml` and add the following code:
+
 ```toml
 #config.toml
-[config]
-appid = "your appid"
-secret_key = "your secret_key"
+[basic]
+backend = "default"
+from = "en"
+to = "zh"
+
+[key]
+appid = "appid_123"
+secert_key = "key_123"
 ```
+
+The `default` backend is [Baidu Translation](https://fanyi.baidu.com/). The `appid` and the `secert_key` can be acquired on [this site](http://api.fanyi.baidu.com/).
+
