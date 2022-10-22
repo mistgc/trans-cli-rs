@@ -1,5 +1,5 @@
 [basic]
-backend = "baidu_trans"
+backend = "default"
 from = "en"
 to = "zh"
 

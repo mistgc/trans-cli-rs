@@ -1,5 +1,7 @@
 0.2.0:
-    feat: 
+    feat: achieved translation feature
+    Refactor config structure and add a new module, "Backend" to separate
+    the front-end and the back-end. So that we can add different platforms' support.
 
 0.1.0:
     feat: provide basic config interface
