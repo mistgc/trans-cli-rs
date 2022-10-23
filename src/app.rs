@@ -64,9 +64,21 @@ impl App {
     }
 
     fn trans(&mut self, text: String) {
+        /* normalize text */
+        let mut normalized_text: Vec<u8> = vec![];
+        let vec_text = text.as_bytes();
+        for i in 0..vec_text.len() {
+            match vec_text[i] as char {
+                '\n' => { normalized_text.push(' ' as u8) },
+                '\r' => {},
+                '\t' => { normalized_text.push(' ' as u8) },
+                _ => { normalized_text.push(vec_text[i])}
+            }
+        }
+        let text = String::from_utf8(normalized_text).expect("Normalizing failed!");
         let data = self.backend.as_mut().unwrap().send_req(&self.config.basic.from, &self.config.basic.to, text).expect("Translating failed.");
         let dest = self.backend.as_ref().unwrap().handle_response(data);
-        println!("{}", dest);
+        println!("\x1b[0;32m{}\x1b[0m", dest);
     }
 }
 
