@@ -37,7 +37,7 @@ impl App {
         if let Some(text) = cli.text {
             match app.config.basic.backend.as_str() {
                 "default" => {
-                    app.backend = Some(Box::new(baidu_trans::Backend::new(&app.config.key.appid, &app.config.key.secert_key)));
+                    app.backend = Some(Box::new(baidu_trans::Backend::new(&app.config.key.appid, &app.config.key.secret_key)));
                 },
                 _ => {}
             }

@@ -8,7 +8,7 @@ use md5;
 pub(crate) struct Backend {
     pub(crate) url: String,
     appid: String,
-    secert_key: String,
+    secret_key: String,
 }
 
 #[derive(Deserialize, Serialize)]
@@ -31,17 +31,17 @@ struct Response {
 }
 
 impl Backend {
-    pub fn new(appid: &str, secert_key: &str) -> Self {
+    pub fn new(appid: &str, secret_key: &str) -> Self {
         Self {
             url: "".to_string(),
             appid: appid.to_string(),
-            secert_key: secert_key.to_string(),
+            secret_key: secret_key.to_string(),
         }
     }
 
     fn format_url(&mut self, from: &String, to: &String, text: &String) {
         let salt: i32 = random();
-        let sign: String = format!("{:x}", md5::compute(self.appid.clone() + text + salt.to_string().as_str() + self.secert_key.as_str()));
+        let sign: String = format!("{:x}", md5::compute(self.appid.clone() + text + salt.to_string().as_str() + self.secret_key.as_str()));
         self.url = format!("https://fanyi-api.baidu.com/api/trans/vip/translate?q={}&from={}&to={}&appid={}&salt={}&sign={}",
                            text,
                            from,

@@ -12,7 +12,7 @@ pub trait ParseConfig where Self: Sized {
 #[derive(Default, Debug, Deserialize, PartialEq, Eq)]
 pub struct Key {
     pub(crate) appid: String,
-    pub(crate) secert_key: String,
+    pub(crate) secret_key: String,
 }
 
 #[derive(Default, Debug, Deserialize, PartialEq, Eq)]
@@ -43,6 +43,6 @@ fn test_load_config() {
     let config = Config::load(path).unwrap();
     assert_eq!(Config {
         basic: Basic { backend: "baidu_trans".to_owned(), from: "en".to_owned(), to: "zh".to_owned() },
-        key: Key { appid: "appid_123".to_owned(), secert_key: "key_123".to_owned() }
+        key: Key { appid: "appid_123".to_owned(), secret_key: "key_123".to_owned() }
     }, config);
 }

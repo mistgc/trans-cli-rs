@@ -5,4 +5,4 @@ to = "zh"
 
 [key]
 appid = "appid_123"
-secert_key = "key_123"
+secret_key = "key_123"

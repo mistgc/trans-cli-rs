@@ -26,8 +26,8 @@ to = "zh"
 
 [key]
 appid = "appid_123"
-secert_key = "key_123"
+secret_key = "key_123"
 ```
 
-The `default` backend is [Baidu Translation](https://fanyi.baidu.com/). The `appid` and the `secert_key` can be acquired on [this site](http://api.fanyi.baidu.com/).
+The `default` backend is [Baidu Translation](https://fanyi.baidu.com/). The `appid` and the `secret_key` can be acquired on [this site](http://api.fanyi.baidu.com/).
 
