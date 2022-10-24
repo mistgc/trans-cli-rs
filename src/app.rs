@@ -2,7 +2,7 @@ use clap::Parser;
 use crate::config::{GLOBAL_CONFIG, Config};
 use std::env;
 use crate::backend::Backend;
-use crate::backend::baidu_trans;
+use crate::backend::{baidu_trans, youdao_trans};
 
 #[derive(Debug, Default)]
 pub struct App {
@@ -39,6 +39,9 @@ impl App {
                 "default" => {
                     app.backend = Some(Box::new(baidu_trans::Backend::new(&app.config.key.appid, &app.config.key.secret_key)));
                 },
+                "youdao" => {
+                    app.backend = Some(Box::new(youdao_trans::Backend::new(&app.config.key.appid, &app.config.key.secret_key)));
+                }
                 _ => {}
             }
             app.trans(text);

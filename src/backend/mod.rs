@@ -1,4 +1,5 @@
 pub(crate) mod baidu_trans;
+pub(crate) mod youdao_trans;
 use reqwest;
 
 use std::fmt::Debug;

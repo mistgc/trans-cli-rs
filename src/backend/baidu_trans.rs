@@ -7,26 +7,32 @@ use md5;
 #[derive(Debug, Default)]
 pub(crate) struct Backend {
     pub(crate) url: String,
+
     appid: String,
+
     secret_key: String,
 }
 
 #[derive(Deserialize, Serialize)]
 struct TransResult {
     pub src: String,
+
     pub dst: String,
 }
 
 #[derive(Deserialize, Serialize)]
 struct TransError {
     pub error_code: String,
+
     pub error_msg: String,
 }
 
 #[derive(Deserialize, Serialize)]
 struct Response {
     pub from: String,
+
     pub to: String,
+
     pub trans_result: Vec<TransResult>,
 }
 
