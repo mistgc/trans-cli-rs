@@ -34,7 +34,7 @@ impl App {
             println!("Number of arguments isn't enough.")
         }
 
-        if let Some(text) = cli.text {
+        if let Some(text) = cli.text.as_ref() {
             match app.config.basic.backend.as_str() {
                 "default" => {
                     app.backend = Some(Box::new(baidu_trans::Backend::new(&app.config.key.appid, &app.config.key.secret_key)));
@@ -44,9 +44,8 @@ impl App {
                 }
                 _ => {}
             }
-            app.trans(text);
+            app.trans(text.to_string());
         }
-
     }
     
     fn new() -> Self {
