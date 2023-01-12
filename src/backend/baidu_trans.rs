@@ -1,8 +1,8 @@
 use crate::backend;
-use rand::prelude::*;
-use serde::{Deserialize, Serialize};
-use reqwest;
 use md5;
+use rand::prelude::*;
+use reqwest;
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Default)]
 pub(crate) struct Backend {
@@ -47,7 +47,12 @@ impl Backend {
 
     fn format_url(&mut self, from: &String, to: &String, text: &String) {
         let salt: i32 = random();
-        let sign: String = format!("{:x}", md5::compute(self.appid.clone() + text + salt.to_string().as_str() + self.secret_key.as_str()));
+        let sign: String = format!(
+            "{:x}",
+            md5::compute(
+                self.appid.clone() + text + salt.to_string().as_str() + self.secret_key.as_str()
+            )
+        );
         self.url = format!("https://fanyi-api.baidu.com/api/trans/vip/translate?q={}&from={}&to={}&appid={}&salt={}&sign={}",
                            text,
                            from,
@@ -59,7 +64,12 @@ impl Backend {
 }
 
 impl backend::Backend for Backend {
-    fn send_req(&mut self, from: &String, to: &String, text: String) -> Result<String, reqwest::Error> {
+    fn send_req(
+        &mut self,
+        from: &String,
+        to: &String,
+        text: String,
+    ) -> Result<String, reqwest::Error> {
         let client = reqwest::blocking::Client::new();
         self.format_url(from, to, &text);
         let resp = client.post(&self.url).send()?.text()?;
@@ -73,7 +83,10 @@ impl backend::Backend for Backend {
             result = resp.trans_result[0].dst.clone();
         } else {
             let err: TransError = serde_json::from_str(resp.as_str()).unwrap();
-             result = format!("Error Code: {}\nError Message: {}", err.error_code, err.error_msg);
+            result = format!(
+                "Error Code: {}\nError Message: {}",
+                err.error_code, err.error_msg
+            );
         }
 
         result

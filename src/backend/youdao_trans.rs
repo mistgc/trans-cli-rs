@@ -1,6 +1,6 @@
 use crate::backend;
 use reqwest;
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 use serde_json;
 
 #[derive(Debug, Default)]
@@ -39,12 +39,20 @@ impl Backend {
             // use auto mode
             (_, _) => "AUTO",
         };
-        self.url = format!("https://fanyi.youdao.com/translate?&doctype=json&type={}&i={}", trans_type, text);
+        self.url = format!(
+            "https://fanyi.youdao.com/translate?&doctype=json&type={}&i={}",
+            trans_type, text
+        );
     }
 }
 
 impl backend::Backend for Backend {
-    fn send_req(&mut self, from: &String, to: &String, text: String) -> Result<String, reqwest::Error> {
+    fn send_req(
+        &mut self,
+        from: &String,
+        to: &String,
+        text: String,
+    ) -> Result<String, reqwest::Error> {
         let client = reqwest::blocking::Client::new();
         self.format_url(from, to, &text);
         let resp = client.get(&self.url).send()?.text()?;

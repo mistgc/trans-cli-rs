@@ -1,8 +1,8 @@
-use clap::Parser;
-use crate::config::{GLOBAL_CONFIG, Config};
-use std::env;
 use crate::backend::Backend;
 use crate::backend::{baidu_trans, youdao_trans};
+use crate::config::{Config, GLOBAL_CONFIG};
+use clap::Parser;
+use std::env;
 
 #[derive(Debug, Default)]
 pub struct App {
@@ -28,26 +28,34 @@ impl App {
         if let (Some(from), Some(to)) = (&cli.from, &cli.to) {
             app.config.basic.from = from.to_owned();
             app.config.basic.to = to.to_owned();
-        } if let (None, Some(_)) = (&cli.from, &cli.to) {
+        }
+        if let (None, Some(_)) = (&cli.from, &cli.to) {
             println!("Number of arguments isn't enough.")
-        } if let (Some(_), None) = (&cli.from, &cli.to) {
+        }
+        if let (Some(_), None) = (&cli.from, &cli.to) {
             println!("Number of arguments isn't enough.")
         }
 
         if let Some(text) = cli.text.as_ref() {
             match app.config.basic.backend.as_str() {
                 "default" => {
-                    app.backend = Some(Box::new(baidu_trans::Backend::new(&app.config.key.appid, &app.config.key.secret_key)));
-                },
+                    app.backend = Some(Box::new(baidu_trans::Backend::new(
+                        &app.config.key.appid,
+                        &app.config.key.secret_key,
+                    )));
+                }
                 "youdao" => {
-                    app.backend = Some(Box::new(youdao_trans::Backend::new(&app.config.key.appid, &app.config.key.secret_key)));
+                    app.backend = Some(Box::new(youdao_trans::Backend::new(
+                        &app.config.key.appid,
+                        &app.config.key.secret_key,
+                    )));
                 }
                 _ => {}
             }
             app.trans(text.to_string());
         }
     }
-    
+
     fn new() -> Self {
         Self::default()
     }
@@ -58,11 +66,12 @@ impl App {
         unsafe {
             GLOBAL_CONFIG = ".config/trans-cli-rs/config.toml".to_owned();
             if let Ok(val) = env::var("HOME") {
-                GLOBAL_CONFIG = val + "/" + GLOBAL_CONFIG.as_ref() ;
+                GLOBAL_CONFIG = val + "/" + GLOBAL_CONFIG.as_ref();
             }
             conf_path = GLOBAL_CONFIG.as_str();
         }
-        self.config = Config::load(conf_path.to_owned()).expect("Please specify \"config.toml\" first.");
+        self.config =
+            Config::load(conf_path.to_owned()).expect("Please specify \"config.toml\" first.");
     }
 
     fn trans(&mut self, text: String) {
@@ -71,14 +80,19 @@ impl App {
         let vec_text = text.as_bytes();
         for i in 0..vec_text.len() {
             match vec_text[i] as char {
-                '\n' => { normalized_text.push(' ' as u8) },
-                '\r' => {},
-                '\t' => { normalized_text.push(' ' as u8) },
-                _ => { normalized_text.push(vec_text[i])}
+                '\n' => normalized_text.push(' ' as u8),
+                '\r' => {}
+                '\t' => normalized_text.push(' ' as u8),
+                _ => normalized_text.push(vec_text[i]),
             }
         }
         let text = String::from_utf8(normalized_text).expect("Normalizing failed!");
-        let data = self.backend.as_mut().unwrap().send_req(&self.config.basic.from, &self.config.basic.to, text).expect("Translating failed.");
+        let data = self
+            .backend
+            .as_mut()
+            .unwrap()
+            .send_req(&self.config.basic.from, &self.config.basic.to, text)
+            .expect("Translating failed.");
         let dest = self.backend.as_ref().unwrap().handle_response(data);
         println!("\x1b[0;32m{}\x1b[0m", dest);
     }
